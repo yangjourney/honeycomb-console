@@ -54,3 +54,23 @@ CREATE TABLE IF NOT EXISTS `hc_console_system_user_acl` (
   `gmt_modified` datetime NOT NULL, --COMMENT '修改时间'
   UNIQUE(`name`, `cluster_code`)
 );
+
+CREATE TABLE IF NOT EXISTS `hc_console_system_cluster_config` (
+  `cluster_code` varchar(50) NOT NULL,
+  `app` varchar(50) DEFAULT '', -- COMMENT '应用名: server, common, apps/xxx',
+  `config` text CHARACTER utf8 DEFAULT '', -- COMMENT '配置文件 json string',
+  `version` INTEGER, -- COMMENT '版本号',
+  `user` varchar(50) DEFAULT '', -- COMMENT '操作人',
+  `gmt_create` datetime NOT NULL -- COMMENT '创建时间'
+);
+
+CREATE TABLE IF NOT EXISTS `hc_console_system_cluster_app_pkgs` (
+  `cluster_code` varchar(50) NOT NULL,
+  `app_id` varchar(50), -- COMMENT '应用id',
+  `app_name` varchar(50),
+  `weight` INTEGER,
+  `package` blob, -- COMMENT '应用包', -- 默认 1,000,000,000，自定义 -DSQLITE_MAX_LENGTH=123456789  参考 https://www.sqlite.org/limits.html
+  `user` varchar(50), -- COMMENT '操作人',
+  `gmt_create` datetime NOT NULL, -- COMMENT '创建时间'
+  UNIQUE(`cluster_code`, `app_id`)
+);

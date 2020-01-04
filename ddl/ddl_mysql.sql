@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `hc_console_system_cluster` (
   `id` INTEGER AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(128),
-  `code` varchar(128) NOT NULL DEFAULT '' UNIQUE,
+  `code` varchar(50) NOT NULL DEFAULT '' UNIQUE,
   `prod` varchar(128) DEFAULT '', -- COMMENT '产品线:'
   `env` varchar(128) DEFAULT '',  -- COMMENT '环境: dev, daily, pre, production'
   `region` varchar(128) DEFAULT '', -- COMMENT '多region: 生产的多套环境'
@@ -52,4 +52,21 @@ CREATE TABLE IF NOT EXISTS `hc_console_system_user_acl` (
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL COMMENT '修改时间',
   UNIQUE KEY `user_cluster` (`name`,`cluster_code`)
+);
+
+CREATE TABLE IF NOT EXISTS `hc_console_system_cluster_config` (
+  `clsuter_code` varchar(50) NOT NULL DEFAULT '',
+  `app` varchar(50) COMMENT '应用名， server, common, apps/xxx',
+  `config` text COMMENT '配置文件 json string',
+  `version` int(11) COMMENT '版本号',
+  `user` varchar(50) COMMENT '操作人',
+  `gmt_create` datetime NOT NULL COMMENT '创建时间'
+);
+
+CREATE TABLE IF NOT EXISTS `hc_console_system_cluster_apps` (
+  `clsuter_code` varchar(50) NOT NULL DEFAULT '',
+  `app_id` varchar(50) COMMENT '应用id',
+  `package` longblob COMMENT '应用包',
+  `user` varchar(50) COMMENT '操作人',
+  `gmt_create` datetime NOT NULL COMMENT '创建时间'
 );

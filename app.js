@@ -11,7 +11,22 @@ app.server.setTimeout(300000);
 config.username = app.config.username;
 config.password = app.config.password;
 
-app.ready(true);
+const cluster = require('./model/cluster');
+const db = require('./common/db');
+
+if (db.ready) {
+  db.ready(() => {
+    cluster.getClusterCfg(() => {
+      app.ready(true);
+    });
+  });
+} else {
+  cluster.getClusterCfg(() => {
+    app.ready(true);
+  });
+}
+
+
 
 
 module.exports = app;

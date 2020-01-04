@@ -141,7 +141,10 @@ exports.parseAppId = function (appId) {
   return {
     name: appName,
     version: version,
-    buildNum: buildNum
+    buildNum: buildNum,
+    id: appId,
+    weight: genWeight(version || '0.0.0.0', buildNum),
+    md5: ''
   };
 };
 

@@ -5,6 +5,7 @@ const formidable = require('formidable');
 const log = require('../common/log');
 const utils = require('../common/utils');
 const cluster = require('../model/cluster');
+const appPackage = require('../model/app_package');
 
 const callremote = utils.callremote;
 
@@ -79,6 +80,21 @@ exports.publishApp = function (req, callback) {
           return cb(err);
         }
         cb(null, files.pkg);
+      });
+    },
+    function (file, cb) {
+      let appId = file.name.replace(/.tgz$/, '');
+      let appInfo = utils.parseAppId(appId);
+      let obj = {
+        clusterCode,
+        appId: appInfo.id,
+        appName: appInfo.name,
+        weight: appInfo.weight,
+        pkg: file.path,
+        user: req.session.username
+      };
+      appPackage.savePackage(obj, (err) => {
+        cb(err, file);
       });
     },
     function (file, cb) {
